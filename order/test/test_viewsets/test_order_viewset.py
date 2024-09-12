@@ -1,17 +1,13 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 import json
 
-from rest_framework import status
-from rest_framework.test import APITestCase, APIClient
-
 from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APIClient, APITestCase
 
-from product.factories import CategoryFactory, ProductFactory
-from order.factories import UserFactory, OrderFactory
-from product.Models import Product
+from order.factories import OrderFactory, UserFactory
 from order.Models import Order
+from product.factories import CategoryFactory, ProductFactory
+from product.Models import Product
 
 
 class TestOrderViewSet(APITestCase):
@@ -30,12 +26,19 @@ class TestOrderViewSet(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        order_data = json.loads(response.content)[0]
-        self.assertEqual(order_data["product"][0]["title"], self.product.title)
-        self.assertEqual(order_data["product"][0]["price"], self.product.price)
-        self.assertEqual(order_data["product"][0]["active"], self.product.active)
+        order_data = json.loads(response.content)
         self.assertEqual(
-            order_data["product"][0]["category"][0]["title"], self.category.title
+            order_data["results"][0]["product"][0]["title"], self.product.title
+        )
+        self.assertEqual(
+            order_data["results"][0]["product"][0]["price"], self.product.price
+        )
+        self.assertEqual(
+            order_data["results"][0]["product"][0]["active"], self.product.active
+        )
+        self.assertEqual(
+            order_data["results"][0]["product"][0]["category"][0]["title"],
+            self.category.title,
         )
 
     def test_create_order(self):
