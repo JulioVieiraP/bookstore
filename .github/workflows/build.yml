@@ -7,7 +7,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.8, 3.9]
+        python-version: [3.10, 3.11, 3.12]
 
     runs-on: ubuntu-latest
 
@@ -24,14 +24,16 @@ jobs:
         python -m ensurepip
         python -m pip install --upgrade pip
         python -m pip install --upgrade poetry
-        echo "::add-path::$(python -m site --user-base)/bin"
+
+    - name: Check Python version
+      run: |
+        python --version
 
     - name: View poetry --help
       run: poetry --help
 
     - name: Install dependencies
-      shell: bash
-      run: python -m poetry install
+      run: poetry install --no-root
 
     - name: Test
       run: |
