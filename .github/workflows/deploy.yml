@@ -23,6 +23,10 @@ jobs:
           pip install poetry
           poetry install
 
+      - name: Run migrations
+        run: |
+          poetry run python manage.py migrate
+
       - name: Run tests
         run: |
           poetry run python manage.py test
