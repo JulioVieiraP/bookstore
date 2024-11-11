@@ -24,12 +24,12 @@ jobs:
         python -m ensurepip
         python -m pip install --upgrade pip
         python -m pip install --upgrade poetry
-
     - name: View poetry --help
       run: poetry --help
 
     - name: Install dependencies
-      run: poetry install --no-root
+      shell: bash
+      run: python -m poetry install
 
     - name: Test
       run: |
